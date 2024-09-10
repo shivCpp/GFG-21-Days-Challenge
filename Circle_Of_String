@@ -1,0 +1,66 @@
+ int isCircle(vector<string> &arr) {
+       
+        vector<int> inDegree(26, 0), outDegree(26, 0);
+        vector<vector<int>> graph(26); // Adjacency list for graph representation
+        
+        // Create graph from the input strings
+        for (string& s : arr) {
+            int start = s.front() - 'a'; // first character
+            int end = s.back() - 'a';    // last character
+            graph[start].push_back(end);
+            outDegree[start]++;
+            inDegree[end]++;
+        }
+        
+         for (int i = 0; i < 26; ++i) {
+            if (inDegree[i] != outDegree[i]) {
+                return 0; // Not possible to form a circle
+            }
+        }
+        
+          return isStronglyConnected(graph, arr[0].front() - 'a') ? 1 : 0;
+    }
+    
+     bool isStronglyConnected(const vector<vector<int>>& graph, int start) {
+        vector<bool> visited(26, false);
+        
+        // Perform DFS from the first character of the first string
+        dfs(graph, start, visited);
+        
+        // Check if all nodes with non-zero outDegree are visited
+        for (int i = 0; i < 26; ++i) {
+            if (graph[i].size() > 0 && !visited[i]) {
+                return false;
+            }
+        }
+        
+         vector<vector<int>> reverseGraph(26);
+        for (int i = 0; i < 26; ++i) {
+            for (int j : graph[i]) {
+                reverseGraph[j].push_back(i);
+            }
+        }
+        
+         fill(visited.begin(), visited.end(), false);
+        dfs(reverseGraph, start, visited);
+        
+        // Check if all nodes with non-zero inDegree are visited
+        for (int i = 0; i < 26; ++i) {
+            if (graph[i].size() > 0 && !visited[i]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+     void dfs(const vector<vector<int>>& graph, int node, vector<bool>& visited) {
+        visited[node] = true;
+        for (int neighbor : graph[node]) {
+            if (!visited[neighbor]) {
+                dfs(graph, neighbor, visited);
+            }
+        }
+    
+        // code here
+    }
