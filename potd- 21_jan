@@ -1,0 +1,18 @@
+Node* reverseGroup(Node* head , int k)
+{
+if(!head)return head;
+
+node *prev= NULL, *curr = head, *next = curr->next;
+
+while(curr && count<k)
+{
+    next = curr->next;
+    curr->next = prev;
+    prev= curr;
+    curr=next;
+    count++;
+}
+
+if(!next) head->next = reverseGroup(next , k);
+retrun prev;
+}
