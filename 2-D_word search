@@ -1,0 +1,60 @@
+class Solution{
+public: 
+  bool solve(int i  , int j , int index  , vector<vector<char>>& mat , string& word , vector<vector<bool>>& visit)
+  {
+      if(index == word.size())
+      {
+          return true;
+      }
+      
+      int row = mat.size();
+      int col = mat[0].size();
+   
+  
+  
+  if(i < 0 || i >= row  || j < 0 || j >= col || mat[i][j] != word[index] || visit[i][j])
+  {
+      return false;
+  }
+  
+  visit[i][j] = true;
+  
+  bool found = 
+  solve(i+1 , j , index+1 , mat, word , visit) ||
+  solve(i-1 , j , index+1 ,mat, word , visit) ||
+  solve(i , j+1 , index+1 ,mat, word , visit) ||
+  solve(i , j-1 ,index+1, mat, word , visit);
+  
+  
+  visit[i][j] = false;
+  
+  return found;
+ 
+  }
+  
+bool isWordExist(vector<vector<char>>& mat, string& word) {
+        // Code here
+        
+        int n = word.size();
+        int row = mat.size();
+        int col = mat[0].size();
+        
+        vector<vector<bool>>visit(row , vector<bool>(col,false));
+        
+        for(int i =0; i< row ; i++)
+        {
+            for(int j =0; j< col ; j++)
+            {
+                if(mat[i][j] == word[0])
+                {
+                    if(solve(i , j , 0 , mat , word , visit))
+                    {
+                        return true;
+                    }
+                }
+                
+            }
+        }
+        return false;  
+    }
+};
